@@ -46,7 +46,7 @@ constexpr auto VECTOR_ZERO_DIVIDE = 0x014u;
 constexpr auto VECTOR_CHK_INSTRUCTION = 0x018u;
 constexpr auto VECTOR_TRAPV_INSTRUCTION = 0x01Cu;
 constexpr auto VECTOR_PRIVILEGE_VIOLATION = 0x020u;
-[[maybe_unused]] constexpr auto VECTOR_TRACE = 0x024u;
+constexpr auto VECTOR_TRACE = 0x024u;
 constexpr auto VECTOR_LINE_1010_EMULATOR = 0x028u;
 constexpr auto VECTOR_LINE_1111_EMULATOR = 0x02Cu;
 
@@ -73,6 +73,7 @@ M68000::M68000(Interrupts& i, Memory& m, Observer& o) :
     flagC{},
     flagT{},
     flagS{ true },
+    trace{},
     stopped{},
     halted{} {}
 
@@ -367,6 +368,7 @@ auto JumpSubroutine(M68000& m68000, uint32_t returnAddress, uint32_t target) {
 
 auto EnterExceptionSupervisorMode(M68000& m68000) {
     const auto sr = m68000.ReadSR();
+    m68000.WriteTrace(false);
     m68000.WriteFlagT(false);
     m68000.WriteFlagS(true);
     return sr;
@@ -447,6 +449,24 @@ auto RaiseTrapvException(M68000& m68000) {
 auto RaisePrivilegeViolationException(M68000& m68000) {
     m68000.ElapseCycles(4u);
     RaiseGroup1And2Exception(m68000, VECTOR_PRIVILEGE_VIOLATION);
+}
+
+auto RaiseTraceException(M68000& m68000) {
+    if (m68000.ReadHalted()) [[unlikely]] {
+        return;
+    }
+    if (!m68000.ReadTrace()) {
+        return;
+    }
+    const auto sr = EnterExceptionSupervisorMode(m68000);
+    const auto pc = m68000.ReadPC();
+    if (!PushGroup1And2ExceptionStackFrame(m68000, pc, sr)) {
+        return;
+    }
+    if (!JumpToExceptionVector(m68000, VECTOR_TRACE)) {
+        return;
+    }
+    m68000.WriteStopped(false);
 }
 
 auto RaiseLineEmulatorException(M68000& m68000, uint32_t vector) {
@@ -7054,7 +7074,9 @@ auto Execute(M68000& m68000) {
         m68000.InternalCycle();
         m68000.InternalCycle();
     } else {
+        m68000.WriteTrace(m68000.ReadFlagT());
         ExecuteInner(m68000);
+        RaiseTraceException(m68000);
     }
     const auto newLevel = GetInterruptLevel(m68000);
     CheckInterrupts(m68000, oldLevel, newLevel);

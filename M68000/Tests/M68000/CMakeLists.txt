@@ -200,6 +200,7 @@ set(EXCEPTIONS_SRC
     src/Exceptions/LineAEmulatorExceptionsTest.cpp
     src/Exceptions/LineFEmulatorExceptionsTest.cpp
     src/Exceptions/PrivilegeExceptionsTest.cpp
+    src/Exceptions/TraceExceptionsTest.cpp
     src/Exceptions/TrapvExceptionsTest.cpp
     src/Exceptions/TrapExceptionsTest.cpp
     src/Exceptions/ZeroDivideExceptionsTest.cpp
