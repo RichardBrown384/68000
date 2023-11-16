@@ -60,6 +60,8 @@ public:
     [[nodiscard]] auto ReadFlagV() const { return (flagV & 0x80000000u) != 0u; }
     [[nodiscard]] auto ReadFlagC() const { return (flagC & 0x80000000u) != 0u; }
 
+    [[nodiscard]] auto ReadTrace() const { return trace; }
+
     [[nodiscard]] auto ReadStopped() const { return stopped; }
     [[nodiscard]] auto ReadHalted() const { return halted; }
 
@@ -89,6 +91,8 @@ public:
     auto WriteFlagZ(uint32_t v) { flagZ = v; };
     auto WriteFlagV(uint32_t v) { flagV = v; };
     auto WriteFlagC(uint32_t v) { flagC = v; };
+
+    auto WriteTrace(bool v) { trace = v; }
 
     auto WriteStopped(bool v) { stopped = v; }
     auto WriteHalted(bool v) { stopped = v; halted = v; }
@@ -130,6 +134,7 @@ private:
     bool flagT;
     bool flagS;
 
+    bool trace;
     bool stopped;
     bool halted;
 };
