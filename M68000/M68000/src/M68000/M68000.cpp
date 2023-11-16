@@ -458,6 +458,8 @@ auto RaiseTraceException(M68000& m68000) {
     if (!m68000.ReadTrace()) {
         return;
     }
+    m68000.InternalCycle();
+    m68000.InternalCycle();
     const auto sr = EnterExceptionSupervisorMode(m68000);
     const auto pc = m68000.ReadPC();
     if (!PushGroup1And2ExceptionStackFrame(m68000, pc, sr)) {
@@ -7073,10 +7075,12 @@ auto Execute(M68000& m68000) {
     if (m68000.ReadStopped()) [[unlikely]] {
         m68000.InternalCycle();
         m68000.InternalCycle();
-    } else {
-        m68000.WriteTrace(m68000.ReadFlagT());
+    } else if (m68000.ReadFlagT()) [[unlikely]] {
+        m68000.WriteTrace(true);
         ExecuteInner(m68000);
         RaiseTraceException(m68000);
+    } else [[likely]] {
+        ExecuteInner(m68000);
     }
     const auto newLevel = GetInterruptLevel(m68000);
     CheckInterrupts(m68000, oldLevel, newLevel);
