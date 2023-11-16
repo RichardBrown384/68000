@@ -1,0 +1,70 @@
+#include "Assembler/Parser/Instructions/InstructionsTest.h"
+
+constexpr auto POSITIVE_VALUES = {
+    "BCLR.L D1, D2",
+    "BCLR.L #1, D2",
+    "BCLR.B D1, (A1)",
+    "BCLR.B #1, (A1)",
+    "BCLR.B D1, (A1)+",
+    "BCLR.B D1, -(A1)",
+    "BCLR.B D1, (10, A1)",
+    "BCLR.B D1, (10, A1, A2.L)",
+    "BCLR.B D1, (2000).W",
+    "BCLR.B D1, (2000).L",
+    "BCLR.B #1, (A1)",
+    "BCLR.B #1, (A1)+",
+    "BCLR.B #1, -(A1)",
+    "BCLR.B #1, (10, A1)",
+    "BCLR.B #1, (10, A1, A2.L)",
+    "BCLR.B #1, (2000).W",
+    "BCLR.B #1, (2000).L",
+};
+
+constexpr auto NEGATIVE_VALUES = {
+    "BCLR.W D1, D2",
+    "BCLR.B D1, D2",
+    "BCLR.W #2, D2",
+    "BCLR.B #2, D2",
+    "BCLR.W D1, (A1)",
+    "BCLR.L D1, (A1)",
+    "BCLR.W #1, (A1)",
+    "BCLR.L #1, (A1)",
+    "BCLR.B D1, A1",
+    "BCLR.B D1, (10, PC)",
+    "BCLR.B D1, (10, PC, A2.L)",
+    "BCLR.B D1, #100",
+    "BCLR.L D1, A1",
+    "BCLR.L D1, (10, PC)",
+    "BCLR.L D1, (10, PC, A2.L)",
+    "BCLR.L D1, #100",
+    "BCLR.B A1, (A1)",
+    "BCLR.B (A1), (A1)",
+    "BCLR.B (A1)+, (A1)",
+    "BCLR.B -(A1), (A1)",
+    "BCLR.B (10, A1), (A1)",
+    "BCLR.B (10, A1, A2.L), (A1)",
+    "BCLR.B (2000).W, (A1)",
+    "BCLR.B (2000).L, (A1)",
+    "BCLR.B (10, PC), (A1)",
+    "BCLR.B (10, PC, D2.L), (A1)",
+    "BCLR.L A1, D1",
+    "BCLR.L (A1), D1",
+    "BCLR.L (A1)+, D1",
+    "BCLR.L -(A1), D1",
+    "BCLR.L (10, A1), D1",
+    "BCLR.L (10, A1, A2.L), D1",
+    "BCLR.L (2000).W, D1",
+    "BCLR.L (2000).L, D1",
+    "BCLR.L (10, PC), D1",
+    "BCLR.L (10, PC, D2.L), D1",
+};
+
+INSTANTIATE_TEST_SUITE_P(ParserBCLRPositives,
+    PositiveTest,
+    ::testing::ValuesIn(POSITIVE_VALUES)
+);
+
+INSTANTIATE_TEST_SUITE_P(ParserBCLRNegatives,
+    NegativeTest,
+    ::testing::ValuesIn(NEGATIVE_VALUES)
+);

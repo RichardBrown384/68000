@@ -1,0 +1,73 @@
+#include "Assembler/Parser/Instructions/InstructionsTest.h"
+
+constexpr auto POSITIVE_VALUES = {
+    "BTST.L D1, D2",
+    "BTST.L #1, D2",
+    "BTST.B D1, (A1)",
+    "BTST.B #1, (A1)",
+    "BTST.B D1, (A1)+",
+    "BTST.B D1, -(A1)",
+    "BTST.B D1, (10, A1)",
+    "BTST.B D1, (10, A1, A2.L)",
+    "BTST.B D1, (10, PC)",
+    "BTST.B D1, (10, PC, A2.L)",
+    "BTST.B D1, (2000).W",
+    "BTST.B D1, (2000).L",
+    "BTST.B D1, #123",
+    "BTST.B #1, (A1)",
+    "BTST.B #1, (A1)+",
+    "BTST.B #1, -(A1)",
+    "BTST.B #1, (10, A1)",
+    "BTST.B #1, (10, A1, A2.L)",
+    "BTST.B #1, (2000).W",
+    "BTST.B #1, (2000).L",
+    "BTST.B #1, (10, PC)",
+    "BTST.B #1, (10, PC, A2.L)",
+};
+
+constexpr auto NEGATIVE_VALUES = {
+    "BTST.W D1, D2",
+    "BTST.B D1, D2",
+    "BTST.W #2, D2",
+    "BTST.B #2, D2",
+    "BTST.B #1, #123",
+    "BTST.W D1, (A1)",
+    "BTST.L D1, (A1)",
+    "BTST.W #1, (A1)",
+    "BTST.L #1, (A1)",
+    "BTST.B D1, A1",
+    "BTST.L D1, A1",
+    "BTST.L D1, (10, PC)",
+    "BTST.L D1, (10, PC, A2.L)",
+    "BTST.L D1, #100",
+    "BTST.B A1, (A1)",
+    "BTST.B (A1), (A1)",
+    "BTST.B (A1)+, (A1)",
+    "BTST.B -(A1), (A1)",
+    "BTST.B (10, A1), (A1)",
+    "BTST.B (10, A1, A2.L), (A1)",
+    "BTST.B (2000).W, (A1)",
+    "BTST.B (2000).L, (A1)",
+    "BTST.B (10, PC), (A1)",
+    "BTST.B (10, PC, D2.L), (A1)",
+    "BTST.L A1, D1",
+    "BTST.L (A1), D1",
+    "BTST.L (A1)+, D1",
+    "BTST.L -(A1), D1",
+    "BTST.L (10, A1), D1",
+    "BTST.L (10, A1, A2.L), D1",
+    "BTST.L (2000).W, D1",
+    "BTST.L (2000).L, D1",
+    "BTST.L (10, PC), D1",
+    "BTST.L (10, PC, D2.L), D1",
+};
+
+INSTANTIATE_TEST_SUITE_P(ParserBTSTPositives,
+    PositiveTest,
+    ::testing::ValuesIn(POSITIVE_VALUES)
+);
+
+INSTANTIATE_TEST_SUITE_P(ParserBTSTNegatives,
+    NegativeTest,
+    ::testing::ValuesIn(NEGATIVE_VALUES)
+);

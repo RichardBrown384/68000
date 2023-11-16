@@ -1,0 +1,252 @@
+set(FIXTURES_INCLUDES
+    include/M68000/Fixtures/M68000Test.h
+)
+
+set(FIXTURES_SRC
+    src/Fixtures/M68000Test.cpp
+)
+
+set(MOCKS_INCLUDES
+    include/M68000/Mocks/M68000Mocks.h
+)
+
+set(MOCKS_SRC)
+
+set(INSTRUCTIONS_SRC
+    src/Instructions/Line0/Bit/BchgDynamicTestByte.cpp
+    src/Instructions/Line0/Bit/BchgDynamicTestLong.cpp
+    src/Instructions/Line0/Bit/BchgStaticTestByte.cpp
+    src/Instructions/Line0/Bit/BchgStaticTestLong.cpp
+    src/Instructions/Line0/Bit/BclrDynamicTestByte.cpp
+    src/Instructions/Line0/Bit/BclrDynamicTestLong.cpp
+    src/Instructions/Line0/Bit/BclrStaticTestByte.cpp
+    src/Instructions/Line0/Bit/BclrStaticTestLong.cpp
+    src/Instructions/Line0/Bit/BsetDynamicTestByte.cpp
+    src/Instructions/Line0/Bit/BsetDynamicTestLong.cpp
+    src/Instructions/Line0/Bit/BsetStaticTestByte.cpp
+    src/Instructions/Line0/Bit/BsetStaticTestLong.cpp
+    src/Instructions/Line0/Bit/BtstDynamicTestByte.cpp
+    src/Instructions/Line0/Bit/BtstDynamicTestLong.cpp
+    src/Instructions/Line0/Bit/BtstStaticTestByte.cpp
+    src/Instructions/Line0/Bit/BtstStaticTestLong.cpp
+    src/Instructions/Line0/Immediate/AddiTestByte.cpp
+    src/Instructions/Line0/Immediate/AddiTestLong.cpp
+    src/Instructions/Line0/Immediate/AddiTestWord.cpp
+    src/Instructions/Line0/Immediate/AndiCcrTest.cpp
+    src/Instructions/Line0/Immediate/AndiSrTest.cpp
+    src/Instructions/Line0/Immediate/AndiTestByte.cpp
+    src/Instructions/Line0/Immediate/AndiTestLong.cpp
+    src/Instructions/Line0/Immediate/AndiTestWord.cpp
+    src/Instructions/Line0/Immediate/CmpiTestByte.cpp
+    src/Instructions/Line0/Immediate/CmpiTestLong.cpp
+    src/Instructions/Line0/Immediate/CmpiTestWord.cpp
+    src/Instructions/Line0/Immediate/EoriCcrTest.cpp
+    src/Instructions/Line0/Immediate/EoriSrTest.cpp
+    src/Instructions/Line0/Immediate/EoriTestByte.cpp
+    src/Instructions/Line0/Immediate/EoriTestLong.cpp
+    src/Instructions/Line0/Immediate/EoriTestWord.cpp
+    src/Instructions/Line0/Immediate/OriCcrTest.cpp
+    src/Instructions/Line0/Immediate/OriSrTest.cpp
+    src/Instructions/Line0/Immediate/OriTestByte.cpp
+    src/Instructions/Line0/Immediate/OriTestLong.cpp
+    src/Instructions/Line0/Immediate/OriTestWord.cpp
+    src/Instructions/Line0/Immediate/SubiTestByte.cpp
+    src/Instructions/Line0/Immediate/SubiTestLong.cpp
+    src/Instructions/Line0/Immediate/SubiTestWord.cpp
+    src/Instructions/Line0/Movep/MovepTestLong.cpp
+    src/Instructions/Line0/Movep/MovepTestWord.cpp
+    src/Instructions/Line1/MoveTestByte_AddressDecrement.cpp
+    src/Instructions/Line1/MoveTestByte_AddressDisplacement.cpp
+    src/Instructions/Line1/MoveTestByte_AddressIncrement.cpp
+    src/Instructions/Line1/MoveTestByte_AddressIndex.cpp
+    src/Instructions/Line1/MoveTestByte_AddressIndirect.cpp
+    src/Instructions/Line1/MoveTestByte_DataDirect.cpp
+    src/Instructions/Line1/MoveTestByte_Long.cpp
+    src/Instructions/Line1/MoveTestByte_Short.cpp
+    src/Instructions/Line2/MoveTestLong_AddressDecrement.cpp
+    src/Instructions/Line2/MoveTestLong_AddressDisplacement.cpp
+    src/Instructions/Line2/MoveTestLong_AddressIncrement.cpp
+    src/Instructions/Line2/MoveTestLong_AddressIndex.cpp
+    src/Instructions/Line2/MoveTestLong_AddressIndirect.cpp
+    src/Instructions/Line2/MoveTestLong_DataDirect.cpp
+    src/Instructions/Line2/MoveTestLong_Long.cpp
+    src/Instructions/Line2/MoveTestLong_Short.cpp
+    src/Instructions/Line2/MoveaTestLong.cpp
+    src/Instructions/Line3/MoveTestWord_AddressDecrement.cpp
+    src/Instructions/Line3/MoveTestWord_AddressDisplacement.cpp
+    src/Instructions/Line3/MoveTestWord_AddressIncrement.cpp
+    src/Instructions/Line3/MoveTestWord_AddressIndex.cpp
+    src/Instructions/Line3/MoveTestWord_AddressIndirect.cpp
+    src/Instructions/Line3/MoveTestWord_DataDirect.cpp
+    src/Instructions/Line3/MoveTestWord_Long.cpp
+    src/Instructions/Line3/MoveTestWord_Short.cpp
+    src/Instructions/Line3/MoveaTestWord.cpp
+    src/Instructions/Line4/ChkTest.cpp
+    src/Instructions/Line4/ClrTest.cpp
+    src/Instructions/Line4/ExtTest.cpp
+    src/Instructions/Line4/JmpTest.cpp
+    src/Instructions/Line4/JsrTest.cpp
+    src/Instructions/Line4/LeaTest.cpp
+    src/Instructions/Line4/LinkTest.cpp
+    src/Instructions/Line4/MoveFromSrTest.cpp
+    src/Instructions/Line4/MoveToCcrTest.cpp
+    src/Instructions/Line4/MoveToSrTest.cpp
+    src/Instructions/Line4/MoveUspTest.cpp
+    src/Instructions/Line4/MovemMemoryTestLong.cpp
+    src/Instructions/Line4/MovemMemoryTestWord.cpp
+    src/Instructions/Line4/MovemRegisterTestLong.cpp
+    src/Instructions/Line4/MovemRegisterTestWord.cpp
+    src/Instructions/Line4/NbcdTest.cpp
+    src/Instructions/Line4/NegTest.cpp
+    src/Instructions/Line4/NegxTest.cpp
+    src/Instructions/Line4/NopTest.cpp
+    src/Instructions/Line4/NotTest.cpp
+    src/Instructions/Line4/PeaTest.cpp
+    src/Instructions/Line4/ResetTest.cpp
+    src/Instructions/Line4/RteTest.cpp
+    src/Instructions/Line4/RtrTest.cpp
+    src/Instructions/Line4/RtsTest.cpp
+    src/Instructions/Line4/StopTest.cpp
+    src/Instructions/Line4/SwapTest.cpp
+    src/Instructions/Line4/TasTest.cpp
+    src/Instructions/Line4/TrapvTest.cpp
+    src/Instructions/Line4/TstTest.cpp
+    src/Instructions/Line4/UnlkTest.cpp
+    src/Instructions/Line5/AddqTestByte.cpp
+    src/Instructions/Line5/AddqTestLong.cpp
+    src/Instructions/Line5/AddqTestWord.cpp
+    src/Instructions/Line5/DBccTest.cpp
+    src/Instructions/Line5/SccTestByte_CC.cpp
+    src/Instructions/Line5/SccTestByte_CS.cpp
+    src/Instructions/Line5/SccTestByte_EQ.cpp
+    src/Instructions/Line5/SccTestByte_F.cpp
+    src/Instructions/Line5/SccTestByte_GE.cpp
+    src/Instructions/Line5/SccTestByte_GT.cpp
+    src/Instructions/Line5/SccTestByte_HI.cpp
+    src/Instructions/Line5/SccTestByte_LE.cpp
+    src/Instructions/Line5/SccTestByte_LS.cpp
+    src/Instructions/Line5/SccTestByte_LT.cpp
+    src/Instructions/Line5/SccTestByte_MI.cpp
+    src/Instructions/Line5/SccTestByte_NE.cpp
+    src/Instructions/Line5/SccTestByte_PL.cpp
+    src/Instructions/Line5/SccTestByte_T.cpp
+    src/Instructions/Line5/SccTestByte_VC.cpp
+    src/Instructions/Line5/SccTestByte_VS.cpp
+    src/Instructions/Line5/SubqTestByte.cpp
+    src/Instructions/Line5/SubqTestLong.cpp
+    src/Instructions/Line5/SubqTestWord.cpp
+    src/Instructions/Line6/BccTest.cpp
+    src/Instructions/Line6/BraTest.cpp
+    src/Instructions/Line6/BsrTest.cpp
+    src/Instructions/Line7/MoveqTest.cpp
+    src/Instructions/Line8/DivsTestWord.cpp
+    src/Instructions/Line8/DivuTestWord.cpp
+    src/Instructions/Line8/OrTestByte.cpp
+    src/Instructions/Line8/OrTestLong.cpp
+    src/Instructions/Line8/OrTestWord.cpp
+    src/Instructions/Line8/SbcdTest.cpp
+    src/Instructions/Line9/SubTestByte.cpp
+    src/Instructions/Line9/SubTestLong.cpp
+    src/Instructions/Line9/SubTestWord.cpp
+    src/Instructions/Line9/SubaTestLong.cpp
+    src/Instructions/Line9/SubaTestWord.cpp
+    src/Instructions/Line9/SubxTestByte.cpp
+    src/Instructions/Line9/SubxTestLong.cpp
+    src/Instructions/Line9/SubxTestWord.cpp
+    src/Instructions/LineB/CmpTestByte.cpp
+    src/Instructions/LineB/CmpTestLong.cpp
+    src/Instructions/LineB/CmpTestWord.cpp
+    src/Instructions/LineB/CmpaTestLong.cpp
+    src/Instructions/LineB/CmpaTestWord.cpp
+    src/Instructions/LineB/CmpmTestByte.cpp
+    src/Instructions/LineB/CmpmTestLong.cpp
+    src/Instructions/LineB/CmpmTestWord.cpp
+    src/Instructions/LineB/EorTestByte.cpp
+    src/Instructions/LineB/EorTestLong.cpp
+    src/Instructions/LineB/EorTestWord.cpp
+    src/Instructions/LineC/AbcdTest.cpp
+    src/Instructions/LineC/AndTestByte.cpp
+    src/Instructions/LineC/AndTestLong.cpp
+    src/Instructions/LineC/AndTestWord.cpp
+    src/Instructions/LineC/ExgTest.cpp
+    src/Instructions/LineC/MulsTestWord.cpp
+    src/Instructions/LineC/MuluTestWord.cpp
+    src/Instructions/LineD/AddTestByte.cpp
+    src/Instructions/LineD/AddTestLong.cpp
+    src/Instructions/LineD/AddTestWord.cpp
+    src/Instructions/LineD/AddaTestLong.cpp
+    src/Instructions/LineD/AddaTestWord.cpp
+    src/Instructions/LineD/AddxTestByte.cpp
+    src/Instructions/LineD/AddxTestLong.cpp
+    src/Instructions/LineD/AddxTestWord.cpp
+    src/Instructions/LineE/AslTest.cpp
+    src/Instructions/LineE/AsrTest.cpp
+    src/Instructions/LineE/LslTest.cpp
+    src/Instructions/LineE/LsrTest.cpp
+    src/Instructions/LineE/RolTest.cpp
+    src/Instructions/LineE/RorTest.cpp
+    src/Instructions/LineE/RoxlTest.cpp
+    src/Instructions/LineE/RoxrTest.cpp
+    )
+
+set(TIMINGS_SRC
+    src/Timings/TimingTests.cpp
+)
+
+set(EXCEPTIONS_SRC
+    src/Exceptions/ChkExceptionsTest.cpp
+    src/Exceptions/IllegalInstructionExceptionsTest.cpp
+    src/Exceptions/InterruptExceptionsTest.cpp
+    src/Exceptions/LineAEmulatorExceptionsTest.cpp
+    src/Exceptions/LineFEmulatorExceptionsTest.cpp
+    src/Exceptions/PrivilegeExceptionsTest.cpp
+    src/Exceptions/TrapvExceptionsTest.cpp
+    src/Exceptions/TrapExceptionsTest.cpp
+    src/Exceptions/ZeroDivideExceptionsTest.cpp
+)
+
+set(ILLEGALS_SRC
+    src/IllegalInstructions/Line0IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line1IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line2IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line3IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line4IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line5IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line7IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line8IllegalInstructionTest.cpp
+    src/IllegalInstructions/Line9IllegalInstructionTest.cpp
+    src/IllegalInstructions/LineBIllegalInstructionTest.cpp
+    src/IllegalInstructions/LineCIllegalInstructionTest.cpp
+    src/IllegalInstructions/LineDIllegalInstructionTest.cpp
+    src/IllegalInstructions/LineEIllegalInstructionTest.cpp
+)
+
+add_executable(M68000Test
+    ${FIXTURES_INCLUDES}
+    ${FIXTURES_SRC}
+    ${MOCKS_INCLUDES}
+    ${MOCKS_SRC}
+    ${INSTRUCTIONS_SRC}
+    ${TIMINGS_SRC}
+    ${EXCEPTIONS_SRC}
+    ${ILLEGALS_SRC}
+)
+
+target_include_directories(M68000Test
+    PRIVATE
+    include
+)
+
+target_compile_options(
+    M68000Test
+    PRIVATE
+    ${PROCESSORS_COMPILER_FLAGS}
+)
+
+target_link_libraries(M68000Test
+    M68000
+    gtest gtest_main
+    nlohmann_json
+)
+
+add_test(NAME M68000Test COMMAND M68000Test)
