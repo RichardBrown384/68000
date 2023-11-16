@@ -23,7 +23,7 @@ TEST_F(TraceExceptionExceptionTest, UserModeTraceNop) {
         "(0x24).L is 0x00BCBCBC",
         "(0x00FFFFFA).W is 0x8011",
         "(0x00FFFFFC).L is 0x00001002",
-        "CYCLES is 34"
+        "CYCLES is 38" // NOP(4) + TRACE(34)
     });
 }
 
@@ -46,7 +46,7 @@ TEST_F(TraceExceptionExceptionTest, SupervisorModeTraceNop) {
         "(0x24).L is 0x00BCBCBC",
         "(0x00FFFFFA).W is 0xA011",
         "(0x00FFFFFC).L is 0x00001002",
-        "CYCLES is 34"
+        "CYCLES is 38" // NOP(4) + TRACE(34)
     });
 }
 
@@ -73,7 +73,7 @@ TEST_F(TraceExceptionExceptionTest, SupervisorModeTraceStop) {
         "(0x24).L is 0x00BCBCBC",
         "(0x00FFFFFA).W is 0x0000",
         "(0x00FFFFFC).L is 0x00001004",
-        "CYCLES is 34"
+        "CYCLES is 38" // STOP(4) + TRACE(34)
     });
 }
 
@@ -105,7 +105,7 @@ TEST_F(TraceExceptionExceptionTest, UserModeTraceNopWithInterrupt) {
         "(0x00FFFFF6).L is 0x00BCBCBC",
         "(0x00FFFFFA).W is 0x8300",
         "(0x00FFFFFC).L is 0x00001002",
-        "CYCLES is 78" // TRACE(34) + INT(44)
+        "CYCLES is 82" // NOP(4) + TRACE(34) + INT(44)
     });
 }
 
@@ -135,7 +135,7 @@ TEST_F(TraceExceptionExceptionTest, SupervisorModeTraceNopWithInterrupt) {
         "(0x00FFFFF6).L is 0x00BCBCBC",
         "(0x00FFFFFA).W is 0xA300",
         "(0x00FFFFFC).L is 0x00001002",
-        "CYCLES is 78" // TRACE(34) + INT(44)
+        "CYCLES is 82" // NOP(4) + TRACE(34) + INT(44)
     });
 }
 
@@ -165,7 +165,7 @@ TEST_F(TraceExceptionExceptionTest, SupervisorModeTraceStopWithInterrupt) {
         "(0x00FFFFF6).L is 0x00BCBCBC",
         "(0x00FFFFFA).W is 0x0000",
         "(0x00FFFFFC).L is 0x00001004",
-        "CYCLES is 78" // TRACE(34) + INT(44)
+        "CYCLES is 82" // STOP(4) + TRACE(34) + INT(44)
     });
 }
 
@@ -195,6 +195,6 @@ TEST_F(TraceExceptionExceptionTest, SupervisorModeTraceStopWithInterruptMakedByS
         "(0x00FFFFF6).L is 0xCDCDCDCD",
         "(0x00FFFFFA).W is 0x0500",
         "(0x00FFFFFC).L is 0x00001004",
-        "CYCLES is 34"
+        "CYCLES is 38" // STOP(4) + TRACE(34)
     });
 }
