@@ -4,10 +4,25 @@ set(M68000_INCLUDES
 )
 
 set(M68000_SRC
-    src/M68000/M68000.cpp
     src/Assembler/Assembler.cpp
     src/Assembler/Assembler_Checks.cpp
     src/Assembler/Assembler_Emit.cpp
+    src/Disassembler/Disassembler.cpp
+    src/Disassembler/Disassembler_Line0.cpp
+    src/Disassembler/Disassembler_Line1.cpp
+    src/Disassembler/Disassembler_Line2.cpp
+    src/Disassembler/Disassembler_Line3.cpp
+    src/Disassembler/Disassembler_Line4.cpp
+    src/Disassembler/Disassembler_Line5.cpp
+    src/Disassembler/Disassembler_Line6.cpp
+    src/Disassembler/Disassembler_Line7.cpp
+    src/Disassembler/Disassembler_Line8.cpp
+    src/Disassembler/Disassembler_Line9.cpp
+    src/Disassembler/Disassembler_LineB.cpp
+    src/Disassembler/Disassembler_LineC.cpp
+    src/Disassembler/Disassembler_LineD.cpp
+    src/Disassembler/Disassembler_LineE.cpp
+    src/M68000/M68000.cpp
     )
 
 add_library(M68000 STATIC
@@ -25,6 +40,12 @@ target_compile_options(
     M68000
     PRIVATE
     ${PROCESSORS_COMPILER_FLAGS}
+)
+
+target_link_libraries(
+    M68000
+    PRIVATE
+    fmt::fmt
 )
 
 install(TARGETS M68000 EXPORT M68000Config DESTINATION lib)

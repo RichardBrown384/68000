@@ -7,10 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(PROCESSORS_BUILD_TESTS "Build tests for processors" ON)
 
+include(FetchContent)
+
 #set(FETCHCONTENT_FULLY_DISCONNECTED true)
 
 if(PROCESSORS_BUILD_TESTS)
-    include(FetchContent)
+
+    enable_testing()
 
     FetchContent_Declare(googletest
         GIT_REPOSITORY     https://github.com/google/googletest.git
@@ -24,8 +27,13 @@ if(PROCESSORS_BUILD_TESTS)
         )
 
     FetchContent_MakeAvailable(googletest json)
-    enable_testing()
 endif()
+
+FetchContent_Declare(fmtlib
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 10.1.1
+    )
+FetchContent_MakeAvailable(fmtlib)
 
 if(MSVC)
     set(PROCESSORS_COMPILER_FLAGS

@@ -2,7 +2,7 @@
 
 ## About
 
-A Motorola 68000 emulator written in C++ released under a MIT licence.
+A Motorola 68000 emulator, assembler and disassembler written in C++ released under a MIT licence.
 
 The project was originally started in 2019 when [Musashi][musashi] wasn't available on GitHub.
 
@@ -25,6 +25,15 @@ the 68000 Programmer's Reference Manual, the 68000 User Manual and various other
 
 It is possible, with an effort this size, that something was overlooked and the tests may be in some way incorrect.
 
+## Assembler and Disassembler
+
+The assembler is currently not a fully featured assembler. It was written to support the concept of 
+human-readable tests. As such it doesn't support branch labels, setting memory and expressions.
+
+Most 68000 assemblers allow for implicit sizing in the instructions. For example, `ADD D1, D2` really means
+`ADD.W D1, D2`. However, in the case of testing we want to be precise and therefore the size, when there 
+is a choice, must be specified.
+
 ## Contributing
 
 Contributions are welcome in the form of pull requests or issues with the following conditions
@@ -45,7 +54,8 @@ This project would have been harder if it had not for the following libraries
 
 1. [orjson][orjson] this significantly outperforms Python's native JSON support and reduced the time spent waiting
 2. [nlohmann][nlohmann] made consuming JSON data for testing purposes easy
-3. [googletest][googletest] fantastic C++ test framework
+3. [googletest][googletest] great C++ test framework
+4. [fmtlib][fmtlib] fantastic C++ substitute for std::format which isn't available on my compiler
 
 ***
 
@@ -53,3 +63,4 @@ This project would have been harder if it had not for the following libraries
 [orjson]: https://github.com/ijl/orjson
 [nlohmann]: https://github.com/nlohmann/json
 [googletest]: https://google.github.io/googletest/
+[fmtlib]: https://github.com/fmtlib/fmt.git
