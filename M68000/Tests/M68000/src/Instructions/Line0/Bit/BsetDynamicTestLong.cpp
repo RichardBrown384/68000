@@ -4,32 +4,38 @@ class BSETDynamicTestLong : public M68000Test {};
 
 TEST_F(BSETDynamicTestLong, BitSetWorks) {
     Given({
+        "SR is S,0,Z",
+        "PC is 0x1000",
         "D1 is 0x17",
         "D2 is 0x00800001",
-        "SR is S,0,Z"
     });
     When({
         "BSET.L D1, D2"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1002",
+        "CYCLES is 8",
         "D1 is 0x17",
         "D2 is 0x00800001",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(BSETDynamicTestLong, BitClearWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x17",
         "D2 is 0x00000001",
-        "SR is S,0,0"
     });
     When({
         "BSET.L D1, D2"
     });
     Then({
+        "SR is S,0,Z",
+        "PC is 0x1002",
+        "CYCLES is 8",
         "D1 is 0x17",
         "D2 is 0x00800001",
-        "SR is S,0,Z"
     });
 }

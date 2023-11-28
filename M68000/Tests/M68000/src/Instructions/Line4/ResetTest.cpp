@@ -5,7 +5,7 @@ class RESETTest : public M68000Test {};
 TEST_F(RESETTest, ResetWorks) {
     Given({
         "SR is S,0,0",
-        "PC is 0x1000"
+        "PC is 0x1000",
     });
     When({
         "RESET"
@@ -13,6 +13,6 @@ TEST_F(RESETTest, ResetWorks) {
     Then({
         "SR is S,0,0",
         "PC is 0x1002",
-        "CYCLES is 132"
+        "CYCLES is 132",
     });
 }

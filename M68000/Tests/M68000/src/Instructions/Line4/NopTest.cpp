@@ -4,7 +4,8 @@ class NOPTest : public M68000Test {};
 
 TEST_F(NOPTest, NOPWorks) {
     Given({
-        "SR is S,0,0"
+        "SR is S,0,0",
+        "PC is 0x1000",
     });
     When({
         "NOP"
@@ -12,7 +13,7 @@ TEST_F(NOPTest, NOPWorks) {
     Then({
         "SR is S,0,0",
         "PC is 0x1002",
-        "CYCLES is 4"
+        "CYCLES is 4",
     });
 }
 

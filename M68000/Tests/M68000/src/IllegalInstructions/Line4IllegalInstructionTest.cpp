@@ -569,6 +569,7 @@ TEST_P(Line4IllegalInstructionTest, IllegalInstructionPattern) {
     const auto illegal = GetParam();
     Given({
         "SR is 0,0,XC",
+        "PC is 0x1000",
         "A7 is 0x00FF0000",
         "SSP is 0x01000000",
         "(0x10).L is 0x00ADBCBC",
@@ -580,13 +581,13 @@ TEST_P(Line4IllegalInstructionTest, IllegalInstructionPattern) {
     });
     Then({
         "SR is S,0,XC",
+        "PC is 0x00ADBCBC",
+        "CYCLES is 34",
         "A7 is 0x00FFFFFA",
         "USP is 0x00FF0000",
-        "PC is 0x00ADBCBC",
         "(0x10).L is 0x00ADBCBC",
         "(0x00FFFFFA).W is 0x0011",
         "(0x00FFFFFC).L is 0x00001002",
-        "CYCLES is 34"
     });
 }
 
