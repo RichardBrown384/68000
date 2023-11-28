@@ -4,136 +4,143 @@ class JSRTest : public M68000Test {};
 
 TEST_F(JSRTest, AddressRegisterIndirect) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "A1 is 0xDCDCDCDC",
         "A7 is 0x01000000",
         "(0x00FFFFFC).L is 0xDEADBEEF",
-        "SR is S,0,0"
     });
     When({
         "JSR (A1)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0xDCDCDCDC",
+        "CYCLES is 16",
         "A1 is 0xDCDCDCDC",
         "A7 is 0x00FFFFFC",
-        "PC is 0xDCDCDCDC",
         "(0x00FFFFFC).L is 0x1002",
-        "SR is S,0,0",
-        "CYCLES is 16"
     });
 }
 
 TEST_F(JSRTest, AddressRegisterIndirectDisplacement) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "A1 is 0xDCDCDC00",
         "A7 is 0x01000000",
         "(0x00FFFFFC).L is 0xDEADBEEF",
-        "SR is S,0,0"
     });
     When({
         "JSR (0xDC, A1)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0xDCDCDCDC",
+        "CYCLES is 18",
         "A1 is 0xDCDCDC00",
         "A7 is 0x00FFFFFC",
-        "PC is 0xDCDCDCDC",
         "(0x00FFFFFC).L is 0x1004",
-        "SR is S,0,0",
-        "CYCLES is 18"
     });
 }
 
 TEST_F(JSRTest, AddressRegisterIndirectIndex) {
     Given({
+       "SR is S,0,0",
+        "PC is 0x1000",
        "A1 is 0xDCDCDC00",
        "A2 is 0x000000D0",
        "A7 is 0x01000000",
        "(0x00FFFFFC).L is 0xDEADBEEF",
-       "SR is S,0,0"
     });
     When({
         "JSR (0xC, A1, A2.L)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0xDCDCDCDC",
+        "CYCLES is 22",
         "A1 is 0xDCDCDC00",
         "A2 is 0x000000D0",
         "A7 is 0x00FFFFFC",
-        "PC is 0xDCDCDCDC",
         "(0x00FFFFFC).L is 0x1004",
-        "SR is S,0,0",
-        "CYCLES is 22"
     });
 }
 
 TEST_F(JSRTest, AbsoluteShort) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "A7 is 0x01000000",
         "(0x00FFFFFC).L is 0xDEADBEEF",
-        "SR is S,0,0"
     });
     When({
         "JSR (0xDCDC).W"
     });
     Then({
-        "A7 is 0x00FFFFFC",
-        "PC is 0xFFFFDCDC",
-        "(0x00FFFFFC).L is 0x1004",
         "SR is S,0,0",
-        "CYCLES is 18"
+        "PC is 0xFFFFDCDC",
+        "CYCLES is 18",
+        "A7 is 0x00FFFFFC",
+        "(0x00FFFFFC).L is 0x1004",
     });
 }
 
 TEST_F(JSRTest, AbsoluteLong) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "A7 is 0x01000000",
         "(0x00FFFFFC).L is 0xDEADBEEF",
-        "SR is S,0,0"
     });
     When({
         "JSR (0xDCDCDCDC).L"
     });
     Then({
-        "A7 is 0x00FFFFFC",
-        "PC is 0xDCDCDCDC",
-        "(0x00FFFFFC).L is 0x1006",
         "SR is S,0,0",
-        "CYCLES is 20"
+        "PC is 0xDCDCDCDC",
+        "CYCLES is 20",
+        "A7 is 0x00FFFFFC",
+        "(0x00FFFFFC).L is 0x1006",
     });
 }
 
 TEST_F(JSRTest, PCDisplacement) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "A7 is 0x01000000",
         "(0x00FFFFFC).L is 0xDEADBEEF",
-        "SR is S,0,0"
     });
     When({
         "JSR (0xDC, PC)"
     });
     Then({
-        "A7 is 0x00FFFFFC",
-        "PC is 0x000010DE",
-        "(0x00FFFFFC).L is 0x1004",
         "SR is S,0,0",
-        "CYCLES is 18"
+        "PC is 0x000010DE",
+        "CYCLES is 18",
+        "A7 is 0x00FFFFFC",
+        "(0x00FFFFFC).L is 0x1004",
     });
 }
 
 TEST_F(JSRTest, PCIndirectIndex) {
     Given({
+       "SR is S,0,0",
+        "PC is 0x1000",
        "A2 is 0x000000D0",
        "A7 is 0x01000000",
        "(0x00FFFFFC).L is 0xDEADBEEF",
-       "SR is S,0,0"
     });
     When({
         "JSR (0xC, PC, A2.L)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x000010DE",
+        "CYCLES is 22",
         "A2 is 0x000000D0",
         "A7 is 0x00FFFFFC",
-        "PC is 0x000010DE",
         "(0x00FFFFFC).L is 0x1004",
-        "SR is S,0,0",
-        "CYCLES is 22"
     });
 }

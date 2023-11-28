@@ -1606,15 +1606,15 @@ class InstructionTimingTest :
 TEST_P(InstructionTimingTest, ShouldExecuteInTheCorrectNumberOfCycles)  {
     const Parameter param = GetParam();
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "A1 is 0x2000",
         "A2 is 0x3000"
     });
     When({
         param.source_line
     });
-    Then({
-        "CYCLES is " + std::to_string(param.cycles)
-    });
+    Then(param.cycles);
 }
 
 INSTANTIATE_TEST_SUITE_P(InstructionTimings,

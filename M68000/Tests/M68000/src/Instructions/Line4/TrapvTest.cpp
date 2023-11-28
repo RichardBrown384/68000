@@ -4,7 +4,8 @@ class TRAPVTest : public M68000Test {};
 
 TEST_F(TRAPVTest, TrapvWhenOverflowIsClearWorks) {
     Given({
-        "SR is S,0,0"
+        "SR is S,0,0",
+        "PC is 0x1000",
     });
     When({
         "TRAPV"
@@ -12,6 +13,6 @@ TEST_F(TRAPVTest, TrapvWhenOverflowIsClearWorks) {
     Then({
         "SR is S,0,0",
         "PC is 0x1002",
-        "CYCLES is 4"
+        "CYCLES is 4",
     });
 }

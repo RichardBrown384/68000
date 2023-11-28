@@ -4,18 +4,19 @@ class RTSTest : public M68000Test {};
 
 TEST_F(RTSTest, RtsWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "A7 is 0x00FFFFFC",
         "(0x00FFFFFC).L is 0x00DDEE02",
-        "SR is S,0,0"
     });
     When({
         "RTS"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x00DDEE02",
+        "CYCLES is 16",
         "A7 is 0x01000000",
         "(0x00FFFFFC).L is 0x00DDEE02",
-        "PC is 0x00DDEE02",
-        "SR is S,0,0",
-        "CYCLES is 16"
     });
 }

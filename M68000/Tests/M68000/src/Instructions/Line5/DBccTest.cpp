@@ -19,720 +19,765 @@ class DBccTest_LE : public M68000Test {};
 
 TEST_F(DBccTest_T, BranchNotTaken) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBT D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,0",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_F, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBF D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,0",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_F, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,0"
     });
     When({
         "DBF D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,0",
-        "CYCLES is 14"
+        "PC is 0x1004",
+        "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_HI, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBHI D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,0",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_HI, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,Z",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,Z"
     });
     When({
         "DBHI D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,Z",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_HI, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,C",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,C"
     });
     When({
         "DBHI D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,C",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_LS, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,ZC",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,ZC"
     });
     When({
         "DBLS D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,ZC",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_LS, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,0"
     });
     When({
         "DBLS D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,0",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_LS, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBLS D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,0",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_CC, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBCC D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,0",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_CC, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,C",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,C"
     });
     When({
         "DBCC D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,C",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_CC, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,C",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,C"
     });
     When({
         "DBCC D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,C",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_CS, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,C",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,C"
     });
     When({
         "DBCS D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,C",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_CS, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,0"
     });
     When({
         "DBCS D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,0",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_CS, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBCS D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,0",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_NE, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBNE D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,0",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_NE, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,Z",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,Z"
     });
     When({
         "DBNE D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,Z",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_NE, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,Z",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,Z"
     });
     When({
         "DBNE D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,Z",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_EQ, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,Z",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,Z"
     });
     When({
         "DBEQ D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,Z",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_EQ, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,0"
     });
     When({
         "DBEQ D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,0",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_EQ, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBEQ D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,0",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_VC, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBVC D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,0",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_VC, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,V",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,V"
     });
     When({
         "DBVC D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,V",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_VC, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,V",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,V"
     });
     When({
         "DBVC D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,V",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_VS, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,V",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,V"
     });
     When({
         "DBVS D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,V",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_VS, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,0"
     });
     When({
         "DBVS D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,0",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_VS, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBVS D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,0",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_PL, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBPL D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,0",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_PL, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,N",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,N"
     });
     When({
         "DBPL D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,N",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_PL, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,N",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,N"
     });
     When({
         "DBPL D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,N",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_MI, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,N",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,N"
     });
     When({
         "DBMI D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,N",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_MI, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,0"
     });
     When({
         "DBMI D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,0",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_MI, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,0"
     });
     When({
         "DBMI D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,0",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_GE, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,NV",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,NV"
     });
     When({
         "DBGE D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,NV",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_GE, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,N",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,N"
     });
     When({
         "DBGE D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,N",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_GE, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,V",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,V"
     });
     When({
         "DBGE D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,V",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_LT, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,N",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,N"
     });
     When({
         "DBLT D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,N",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_LT, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,NV",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,NV"
     });
     When({
         "DBLT D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,NV",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_LT, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,NV",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,NV"
     });
     When({
         "DBLT D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,NV",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_GT, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,NV",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,NV"
     });
     When({
         "DBGT D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,NV",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_GT, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,NZ",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,NZ"
     });
     When({
         "DBGT D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,NZ",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_GT, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,NZ",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,NZ"
     });
     When({
         "DBGT D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,NZ",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }
 
 TEST_F(DBccTest_LE, BranchNotTakenWhenConditionTrue) {
     Given({
+        "SR is S,0,NZ",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,NZ"
     });
     When({
         "DBLE D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0x20",
         "SR is S,0,NZ",
-        "CYCLES is 12"
+        "PC is 0x1004",
+        "CYCLES is 12",
+        "D1 is 0x20",
     });
 }
 
 TEST_F(DBccTest_LE, BranchNotTakenWhenCounterExpired) {
     Given({
+        "SR is S,0,NV",
+        "PC is 0x1000",
         "D1 is 0x0",
-        "SR is S,0,NV"
     });
     When({
         "DBLE D1, *+0x10"
     });
     Then({
-        "PC is 0x1004",
-        "D1 is 0xFFFF",
         "SR is S,0,NV",
+        "PC is 0x1004",
         "CYCLES is 14",
+        "D1 is 0xFFFF",
     });
 }
 
 TEST_F(DBccTest_LE, BranchTakenWhenCounterNonZero) {
     Given({
+        "SR is S,0,NV",
+        "PC is 0x1000",
         "D1 is 0x20",
-        "SR is S,0,NV"
     });
     When({
         "DBLE D1, *+0x10"
     });
     Then({
-        "PC is 0x1010",
-        "D1 is 0x1F",
         "SR is S,0,NV",
-        "CYCLES is 10"
+        "PC is 0x1010",
+        "CYCLES is 10",
+        "D1 is 0x1F",
     });
 }

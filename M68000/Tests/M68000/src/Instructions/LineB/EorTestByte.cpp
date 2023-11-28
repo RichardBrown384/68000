@@ -4,204 +4,240 @@ class EORTestByte : public M68000Test {};
 
 TEST_F(EORTestByte, DataRegisterDataRegisterWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x03030313",
         "D2 is 0xF0F0F041",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, D2"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0x03030313",
         "D2 is 0xF0F0F052",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterDataRegisterFlagNWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x03030385",
         "D2 is 0xF0F0F014",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, D2"
     });
     Then({
+        "SR is S,0,N",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0x03030385",
         "D2 is 0xF0F0F091",
-        "SR is S,0,N"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterDataRegisterFlagZWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x03030360",
         "D2 is 0xF0F0F060",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, D2"
     });
     Then({
+        "SR is S,0,Z",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0x03030360",
         "D2 is 0xF0F0F000",
-        "SR is S,0,Z"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterDataRegisterFlagXWorks) {
     Given({
+        "SR is S,0,X",
+        "PC is 0x1000",
         "D1 is 0x03030313",
         "D2 is 0xF0F0F054",
-        "SR is S,0,X"
     });
     When({
         "EOR.B D1, D2"
     });
     Then({
+        "SR is S,0,X",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0x03030313",
         "D2 is 0xF0F0F047",
-        "SR is S,0,X"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterDataRegisterFlagVCWorks) {
     Given({
+        "SR is S,0,VC",
+        "PC is 0x1000",
         "D1 is 0x01010113",
         "D2 is 0x10101021",
-        "SR is S,0,VC"
     });
     When({
         "EOR.B D1, D2"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0x01010113",
         "D2 is 0x10101032",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterAddressIndirectWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "(0x00008000).B is 0x7A",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, (A1)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1002",
+        "CYCLES is 12",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "(0x00008000).B is 0x36",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterAddressIncrementWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "(0x00008000).B is 0x7A",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, (A1)+"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1002",
+        "CYCLES is 12",
         "D1 is 0x0101014C",
         "A1 is 0x00008001",
         "(0x00008000).B is 0x36",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterAddressDecrementWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0101014C",
         "A1 is 0x00008001",
         "(0x00008000).B is 0x7A",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, -(A1)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1002",
+        "CYCLES is 14",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "(0x00008000).B is 0x36",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterAddressIndexWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "(0x00008002).B is 0x7A",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, (2, A1)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1004",
+        "CYCLES is 16",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "(0x00008002).B is 0x36",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterAddressDisplacementWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "A2 is 0x00000010",
         "(0x00008012).B is 0x7A",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, (2, A1, A2.L)"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1004",
+        "CYCLES is 18",
         "D1 is 0x0101014C",
         "A1 is 0x00008000",
         "A2 is 0x00000010",
         "(0x00008012).B is 0x36",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterShortWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0101014C",
         "(0x00004000).B is 0x7A",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, (0x4000).W"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1004",
+        "CYCLES is 16",
         "D1 is 0x0101014C",
         "(0x00004000).B is 0x36",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(EORTestByte, DataRegisterLongWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x0101014C",
         "(0x00008000).B is 0x7A",
-        "SR is S,0,0"
     });
     When({
         "EOR.B D1, (0x8000).L"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1006",
+        "CYCLES is 20",
         "D1 is 0x0101014C",
         "(0x00008000).B is 0x36",
-        "SR is S,0,0"
     });
 }

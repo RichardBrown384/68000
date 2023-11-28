@@ -4,45 +4,51 @@ class SWAPTest : public M68000Test {};
 
 TEST_F(SWAPTest, SwapWorks) {
     Given({
+        "SR is S,0,XVC",
+        "PC is 0x1000",
         "D6 is 0x98ABCDEF",
-        "SR is S,0,XVC"
     });
     When({
         "SWAP D6"
     });
     Then({
-        "D6 is 0xCDEF98AB",
         "SR is S,0,XN",
-        "CYCLES is 4"
+        "PC is 0x1002",
+        "CYCLES is 4",
+        "D6 is 0xCDEF98AB",
     });
 }
 
 TEST_F(SWAPTest, ZeroFlagShouldNotBeSetWhenOnlyLowerWordIsZero) {
     Given({
+        "SR is S,0,XVC",
+        "PC is 0x1000",
         "D6 is 0x0000CDEF",
-        "SR is S,0,XVC"
     });
     When({
         "SWAP D6"
     });
     Then({
-        "D6 is 0xCDEF0000",
         "SR is S,0,XN",
-        "CYCLES is 4"
+        "PC is 0x1002",
+        "CYCLES is 4",
+        "D6 is 0xCDEF0000",
     });
 }
 
 TEST_F(SWAPTest, ZeroFlagShouldBeSetWhenResultIsZero) {
     Given({
+        "SR is S,0,XVC",
+        "PC is 0x1000",
         "D6 is 0x00000000",
-        "SR is S,0,XVC"
     });
     When({
         "SWAP D6"
     });
     Then({
-        "D6 is 0x00000000",
         "SR is S,0,XZ",
-        "CYCLES is 4"
+        "PC is 0x1002",
+        "CYCLES is 4",
+        "D6 is 0x00000000",
     });
 }

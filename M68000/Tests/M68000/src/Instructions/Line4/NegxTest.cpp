@@ -4,70 +4,85 @@ class NEGXTest : public M68000Test {};
 
 TEST_F(NEGXTest, RegisterNEGXWorks) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x22",
-        "SR is S,0,0"
     });
     When({
         "NEGX.B D1"
     });
     Then({
+        "SR is S,0,XNC",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0xDE",
-        "SR is S,0,XNC"
     });
 }
 
 TEST_F(NEGXTest, ExtendFlagInfluencesResult) {
     Given({
+        "SR is S,0,X",
+        "PC is 0x1000",
         "D1 is 0x22",
-        "SR is S,0,X"
     });
     When({
         "NEGX.B D1"
     });
     Then({
+        "SR is S,0,XNC",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0xDD",
-        "SR is S,0,XNC"
     });
 }
 
 TEST_F(NEGXTest, ZeroFlagClearZeroResult) {
     Given({
+        "SR is S,0,0",
+        "PC is 0x1000",
         "D1 is 0x00",
-        "SR is S,0,0"
     });
     When({
         "NEGX.B D1"
     });
     Then({
+        "SR is S,0,0",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0x00",
-        "SR is S,0,0"
     });
 }
 
 TEST_F(NEGXTest, ZeroFlagSetZeroResult) {
     Given({
+        "SR is S,0,Z",
+        "PC is 0x1000",
         "D1 is 0x00",
-        "SR is S,0,Z"
     });
     When({
         "NEGX.B D1"
     });
     Then({
+        "SR is S,0,Z",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D2 is 0x00",
-        "SR is S,0,Z"
     });
 }
 
 TEST_F(NEGXTest, ZeroFlagSetNonZeroResult) {
     Given({
+        "SR is S,0,Z",
+        "PC is 0x1000",
         "D1 is 0x02",
-        "SR is S,0,Z"
     });
     When({
         "NEGX.B D1"
     });
     Then({
+        "SR is S,0,XNC",
+        "PC is 0x1002",
+        "CYCLES is 4",
         "D1 is 0xFE",
-        "SR is S,0,XNC"
     });
 }

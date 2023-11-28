@@ -12,9 +12,6 @@ using namespace rbrown::m68000;
 
 namespace {
 
-constexpr auto RESET_STACK_POINTER = 0x01000000u;
-constexpr auto RESET_PROGRAM_COUNTER = 0x1000u;
-
 constexpr auto FLAG_T = 0x8000u;
 constexpr auto FLAG_S = 0x2000u;
 constexpr auto FLAG_X = 0x0010u;
@@ -191,18 +188,65 @@ M68000Test::M68000Test() :
 
 M68000Test::~M68000Test() = default;
 
-void M68000Test::Given(std::initializer_list<std::string> conditions) {
-    impl->m68000.WriteSP(RESET_STACK_POINTER);
-    impl->m68000.WritePC(RESET_PROGRAM_COUNTER);
-    for (const auto& condition: conditions) {
-        Apply(condition.c_str());
-        if (HasFatalFailure()) {
-            return;
+void M68000Test::Given(const std::initializer_list<const char*>& conditions) {
+    if (HasFatalFailure()) {
+        return;
+    }
+    uint32_t r, address, v;
+    uint32_t oldLevel, newLevel, vector;
+    const auto size = conditions.size();
+    const auto& data = std::data(conditions);
+    ASSERT_TRUE(conditions.size() >= 2);
+    ASSERT_TRUE(MatchStatusRegister(data[0u], v));
+    ASSERT_TRUE(MatchProgramCounter(data[1u], address));
+    impl->m68000.WriteSR(v);
+    impl->m68000.WritePC(address);
+    auto index = 2u;
+    while (index < size && MatchDataRegister(data[index], r, v)) {
+        impl->m68000.WriteDataRegisterLong(r, v);
+        ++index;
+    }
+    while (index < size && MatchAddressRegister(data[index], r, v)) {
+        impl->m68000.WriteAddressRegisterLong(r, v);
+        ++index;
+    }
+    if (index < size && MatchUserStackPointer(data[index], v)) {
+        impl->m68000.WriteUSP(v);
+        ++index;
+    }
+    if (index < size && MatchSupervisorStackPointer(data[index], v)) {
+        impl->m68000.WriteSSP(v);
+        ++index;
+    }
+    if (index < size && MatchStopped(data[index], v)) {
+        impl->m68000.WriteStopped(v);
+        ++index;
+    }
+    if (index < size && MatchInterrupts(data[index], oldLevel, newLevel, vector)) {
+        impl->interrupts.SetInitialLevel(oldLevel);
+        impl->interrupts.SetSubsequentLevel(newLevel);
+        impl->interrupts.SetInterruptVector(vector);
+        ++index;
+    }
+    while (index < size) {
+        const auto condition = data[index];
+        if (MatchMemoryByte(condition, address, v)) {
+            ASSERT_TRUE(impl->memory.WriteByte(address, v));
+            ++index;
+        } else if (MatchMemoryWord(condition, address, v)) {
+            ASSERT_TRUE(impl->memory.WriteWord(address, v));
+            ++index;
+        } else if (MatchMemoryLong(condition, address, v)) {
+            ASSERT_TRUE(impl->memory.WriteWord(address, v >> 16u));
+            ASSERT_TRUE(impl->memory.WriteWord(address + 2u, v));
+            ++index;
+        } else {
+            FAIL() << condition;
         }
     }
 }
 
-void M68000Test::When(std::initializer_list<const char*> assembly) {
+void M68000Test::When(const std::initializer_list<const char*>& assembly) {
     if (HasFatalFailure()) {
         return;
     }
@@ -222,7 +266,7 @@ void M68000Test::When(std::initializer_list<const char*> assembly) {
     }
 }
 
-void M68000Test::When(std::initializer_list<uint32_t> words) {
+void M68000Test::When(const std::initializer_list<uint32_t>& words) {
     if (HasFatalFailure()) {
         return;
     }
@@ -230,15 +274,6 @@ void M68000Test::When(std::initializer_list<uint32_t> words) {
     Apply(impl->m68000.ReadPC(), words);
 
     impl->m68000.Execute();
-}
-
-void M68000Test::Then(std::initializer_list<std::string> conditions) {
-    if (HasFatalFailure()) {
-        return;
-    }
-    for (const auto& condition: conditions) {
-        Expect(condition.c_str());
-    }
 }
 
 void M68000Test::Apply(uint32_t address, const std::vector<uint32_t>& words) {
@@ -256,80 +291,81 @@ void M68000Test::Apply(uint32_t address, const std::vector<uint32_t>& words) {
     }
 }
 
-void M68000Test::Apply(const char* condition) {
-    uint32_t r, address, v;
-    uint32_t oldLevel, newLevel, vector;
-    if (MatchDataRegister(condition, r, v)) {
-        impl->m68000.WriteDataRegisterLong(r, v);
-    } else if (MatchAddressRegister(condition, r, v)) {
-        impl->m68000.WriteAddressRegisterLong(r, v);
-    } else if (MatchProgramCounter(condition, v)) {
-        impl->m68000.WritePC(v);
-    } else if (MatchUserStackPointer(condition, v)) {
-        impl->m68000.WriteUSP(v);
-    } else if (MatchSupervisorStackPointer(condition, v)) {
-        impl->m68000.WriteSSP(v);
-    } else if (MatchStatusRegister(condition, v)) {
-        impl->m68000.WriteSR(v);
-    } else if (MatchStopped(condition, v)) {
-        impl->m68000.WriteStopped(v);
-    } else if (MatchMemoryByte(condition, address, v)) {
-        ASSERT_TRUE(impl->memory.WriteByte(address, v));
-    } else if (MatchMemoryWord(condition, address, v)) {
-        ASSERT_TRUE(impl->memory.WriteWord(address, v));
-    } else if (MatchMemoryLong(condition, address, v)) {
-        ASSERT_TRUE(impl->memory.WriteWord(address, v >> 16u));
-        ASSERT_TRUE(impl->memory.WriteWord(address + 2u, v));
-    } else if (MatchInterrupts(condition, oldLevel, newLevel, vector)) {
-        impl->interrupts.SetInitialLevel(oldLevel);
-        impl->interrupts.SetSubsequentLevel(newLevel);
-        impl->interrupts.SetInterruptVector(vector);
-    } else {
-        FAIL() << condition;
+void M68000Test::Then(const std::initializer_list<const char*>& conditions) {
+    if (HasFatalFailure()) {
+        return;
+    }
+    uint32_t r, address, expected;
+    const auto size = conditions.size();
+    const auto& data = std::data(conditions);
+    ASSERT_TRUE(conditions.size() >= 3u);
+    {
+        ASSERT_TRUE(MatchStatusRegister(data[0u], expected));
+        const auto actual = impl->m68000.ReadSR();
+        EXPECT_EQ(expected, actual) << data[0u];
+    }
+    {
+        ASSERT_TRUE(MatchProgramCounter(data[1u], expected));
+        const auto actual = impl->m68000.ReadPC();
+        EXPECT_EQ(expected, actual) << data[1u];
+    }
+    {
+        ASSERT_TRUE(MatchCycles(data[2u], expected));
+        const auto actual = impl->observer.GetCycles();
+        EXPECT_EQ(expected, actual) << data[2u];
+    }
+    auto index = 3u;
+    while (index < size && MatchDataRegister(data[index], r, expected)) {
+        const auto actual = impl->m68000.ReadDataRegisterLong(r);
+        EXPECT_EQ(expected, actual) << data[index];
+        ++index;
+    }
+    while (index < size && MatchAddressRegister(data[index], r, expected)) {
+        const auto actual = impl->m68000.ReadAddressRegisterLong(r);
+        EXPECT_EQ(expected, actual) << data[index];
+        ++index;
+    }
+    if (index < size && MatchUserStackPointer(data[index], expected)) {
+        const auto actual = impl->m68000.ReadUSP();
+        EXPECT_EQ(expected, actual) << data[index];
+        ++index;
+    }
+    if (index < size && MatchSupervisorStackPointer(data[index], expected)) {
+        const auto actual = impl->m68000.ReadSSP();
+        EXPECT_EQ(expected, actual) << data[index];
+        ++index;
+    }
+    if (index < size && MatchStopped(data[index], expected)) {
+        const auto actual = impl->m68000.ReadStopped();
+        EXPECT_EQ(expected, actual) << data[index];
+        ++index;
+    }
+    while (index < size) {
+        const auto condition = data[index];
+        if (MatchMemoryByte(condition, address, expected)) {
+            uint32_t actual;
+            ASSERT_TRUE(impl->memory.ReadByte(address, actual));
+            EXPECT_EQ(expected, actual) << condition;
+            ++index;
+        } else if (MatchMemoryWord(condition, address, expected)) {
+            uint32_t actual;
+            ASSERT_TRUE(impl->memory.ReadWord(address, actual));
+            EXPECT_EQ(expected, actual) << condition;
+            ++index;
+        } else if (MatchMemoryLong(condition, address, expected)) {
+            uint32_t hi, lo;
+            ASSERT_TRUE(impl->memory.ReadWord(address, hi));
+            ASSERT_TRUE(impl->memory.ReadWord(address + 2u, lo));
+            const auto actual = (hi << 16u) + lo;
+            EXPECT_EQ(expected, actual) << condition;
+            ++index;
+        } else {
+            FAIL() << condition;
+        }
     }
 }
 
-void M68000Test::Expect(const char* condition) {
-    uint32_t r, address, expected;
-    if (MatchDataRegister(condition, r, expected)) {
-        const auto actual = impl->m68000.ReadDataRegisterLong(r);
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchAddressRegister(condition, r, expected)) {
-        const auto actual = impl->m68000.ReadAddressRegisterLong(r);
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchProgramCounter(condition, expected)) {
-        const auto actual = impl->m68000.ReadPC();
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchUserStackPointer(condition, expected)) {
-        const auto actual = impl->m68000.ReadUSP();
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchSupervisorStackPointer(condition, expected)) {
-        const auto actual = impl->m68000.ReadSSP();
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchStatusRegister(condition, expected)) {
-        const auto actual = impl->m68000.ReadSR();
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchCycles(condition, expected)) {
-        const auto actual = impl->observer.GetCycles();
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchStopped(condition, expected)) {
-        const auto actual = impl->m68000.ReadStopped();
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchMemoryByte(condition, address, expected)) {
-        uint32_t actual;
-        ASSERT_TRUE(impl->memory.ReadByte(address, actual));
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchMemoryWord(condition, address, expected)) {
-        uint32_t actual;
-        ASSERT_TRUE(impl->memory.ReadWord(address, actual));
-        EXPECT_EQ(expected, actual) << condition;
-    } else if (MatchMemoryLong(condition, address, expected)) {
-        uint32_t hi, lo;
-        ASSERT_TRUE(impl->memory.ReadWord(address, hi));
-        ASSERT_TRUE(impl->memory.ReadWord(address + 2u, lo));
-        const auto actual = (hi << 16u) + lo;
-        EXPECT_EQ(expected, actual) << condition;
-    } else {
-        FAIL() << condition;
-    }
+void M68000Test::Then(uint32_t expected) {
+    const auto actual = impl->observer.GetCycles();
+    EXPECT_EQ(expected, actual) << "CYCLES is " << expected;
 }
