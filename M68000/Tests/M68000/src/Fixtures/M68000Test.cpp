@@ -2,6 +2,7 @@
 #include "M68000/Mocks/M68000Mocks.h"
 
 #include "M68000/M68000.h"
+#include "M68000/M68000_Constants.h"
 #include "M68000/Assembler.h"
 
 #include <regex>
@@ -12,33 +13,50 @@ using namespace rbrown::m68000;
 
 namespace {
 
-constexpr auto FLAG_T = 0x8000u;
-constexpr auto FLAG_S = 0x2000u;
-constexpr auto FLAG_X = 0x0010u;
-constexpr auto FLAG_N = 0x0008u;
-constexpr auto FLAG_Z = 0x0004u;
-constexpr auto FLAG_V = 0x0002u;
-constexpr auto FLAG_C = 0x0001u;
-
-auto StringToSupervisorRegister(const std::string& ts) -> uint32_t {
-    uint32_t sr{};
-    for (auto& c: ts) {
-        if (c == 'T') sr |= FLAG_T;
-        if (c == 'S') sr |= FLAG_S;
+auto MatchStatusRegister(const char* condition, uint32_t& v) -> bool {
+    static const std::regex STATUS_REGISTER(R"(^SR is ([TS]+|0),([0-7]),([XNZVC]+|0)$)");
+    std::cmatch match;
+    if (std::regex_match(condition, match, STATUS_REGISTER)) {
+        const std::string& ts = match.str(1);
+        const std::string& mask = match.str(2);
+        const std::string& xnzvc = match.str(3);
+        uint32_t sr{};
+        for (const auto& c: ts) {
+            if (c == 'T') sr |= FLAG_T;
+            if (c == 'S') sr |= FLAG_S;
+        }
+        sr |= std::stoul(mask, nullptr, 10) << 8u;
+        for (const auto& c: xnzvc) {
+            if (c == 'X') sr |= FLAG_X;
+            if (c == 'N') sr |= FLAG_N;
+            if (c == 'Z') sr |= FLAG_Z;
+            if (c == 'V') sr |= FLAG_V;
+            if (c == 'C') sr |= FLAG_C;
+        }
+        v = sr;
+        return true;
     }
-    return sr;
+    return false;
 }
 
-auto StringToConditionCodeRegister(const std::string& xnzvc) -> uint32_t {
-    uint32_t ccr{};
-    for (auto& c: xnzvc) {
-        if (c == 'X') ccr |= FLAG_X;
-        if (c == 'N') ccr |= FLAG_N;
-        if (c == 'Z') ccr |= FLAG_Z;
-        if (c == 'V') ccr |= FLAG_V;
-        if (c == 'C') ccr |= FLAG_C;
+auto MatchProgramCounter(const char* condition, uint32_t& v) -> bool {
+    static const std::regex PC(R"(^PC is 0x([0-9A-F]+)$)");
+    std::cmatch match;
+    if (std::regex_match(condition, match, PC)) {
+        v = std::stoul(match.str(1), nullptr, 16);
+        return true;
     }
-    return ccr;
+    return false;
+}
+
+auto MatchCycles(const char* condition, uint32_t& v) -> bool {
+    static const std::regex CYCLES(R"(^CYCLES is ([1-9][0-9]*)$)");
+    std::cmatch match;
+    if (std::regex_match(condition, match, CYCLES)) {
+        v = std::stoul(match.str(1), nullptr, 10);
+        return true;
+    }
+    return false;
 }
 
 auto MatchDataRegister(const char* condition, uint32_t& r, uint32_t& v) -> bool {
@@ -58,16 +76,6 @@ auto MatchAddressRegister(const char* condition, uint32_t& r, uint32_t& v) -> bo
     if (std::regex_match(condition, match, ADDRESS_REGISTER)) {
         r = std::stoul(match.str(1), nullptr, 10);
         v = std::stoul(match.str(2), nullptr, 16);
-        return true;
-    }
-    return false;
-}
-
-auto MatchProgramCounter(const char* condition, uint32_t& v) -> bool {
-    static const std::regex PC(R"(^PC is 0x([0-9A-F]+)$)");
-    std::cmatch match;
-    if (std::regex_match(condition, match, PC)) {
-        v = std::stoul(match.str(1), nullptr, 16);
         return true;
     }
     return false;
@@ -93,34 +101,23 @@ auto MatchSupervisorStackPointer(const char* condition, uint32_t& v) -> bool {
     return false;
 }
 
-auto MatchStatusRegister(const char* condition, uint32_t& v) -> bool {
-    static const std::regex STATUS_REGISTER(R"(^SR is ([TS]+|0),([0-7]),([XNZVC]+|0)$)");
-    std::cmatch match;
-    if (std::regex_match(condition, match, STATUS_REGISTER)) {
-        auto sr = StringToSupervisorRegister(match.str(1));
-        sr |= std::stoul(match.str(2), nullptr, 10) << 8u;
-        sr |= StringToConditionCodeRegister(match.str(3));
-        v = sr;
-        return true;
-    }
-    return false;
-}
-
-auto MatchCycles(const char* condition, uint32_t& v) -> bool {
-    static const std::regex CYCLES(R"(^CYCLES is ([1-9][0-9]*)$)");
-    std::cmatch match;
-    if (std::regex_match(condition, match, CYCLES)) {
-        v = std::stoul(match.str(1), nullptr, 10);
-        return true;
-    }
-    return false;
-}
-
 auto MatchStopped(const char* condition, uint32_t& v) -> bool {
     static const std::regex STOPPED(R"(^STOPPED is (0|1)$)");
     std::cmatch match;
     if (std::regex_match(condition, match, STOPPED)) {
         v = std::stoul(match.str(1), nullptr, 10);
+        return true;
+    }
+    return false;
+}
+
+auto MatchInterrupts(const char* condition, uint32_t& oldLevel, uint32_t& newLevel, uint32_t& vector) -> bool {
+    static const std::regex INTERRUPTS(R"(INT is ([0-7]),([0-7]),([0-7]+))");
+    std::cmatch match;
+    if (std::regex_match(condition, match, INTERRUPTS)) {
+        oldLevel = std::stoul(match.str(1), nullptr, 10);
+        newLevel = std::stoul(match.str(2), nullptr, 10);
+        vector = std::stoul(match.str(3), nullptr, 10);
         return true;
     }
     return false;
@@ -154,18 +151,6 @@ auto MatchMemoryLong(const char* condition, uint32_t& address, uint32_t& v) -> b
     if (std::regex_match(condition, match, MEMORY_LONG)) {
         address = std::stoul(match.str(1), nullptr, 16);
         v = std::stoul(match.str(2), nullptr, 16);
-        return true;
-    }
-    return false;
-}
-
-auto MatchInterrupts(const char* condition, uint32_t& oldLevel, uint32_t& newLevel, uint32_t& vector) -> bool {
-    static const std::regex INTERRUPTS(R"(INT is ([0-7]),([0-7]),([0-7]+))");
-    std::cmatch match;
-    if (std::regex_match(condition, match, INTERRUPTS)) {
-        oldLevel = std::stoul(match.str(1), nullptr, 10);
-        newLevel = std::stoul(match.str(2), nullptr, 10);
-        vector = std::stoul(match.str(3), nullptr, 10);
         return true;
     }
     return false;

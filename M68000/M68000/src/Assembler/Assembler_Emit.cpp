@@ -1,6 +1,7 @@
 #include <cstdint>
 
 #include "M68000/AssemblerImpl.h"
+#include "M68000/M68000_Constants.h"
 
 namespace rbrown::m68000 {
 
@@ -9,23 +10,6 @@ namespace {
 constexpr auto SIZE_BYTE = 0u;
 constexpr auto SIZE_WORD = 1u;
 constexpr auto SIZE_LONG = 2u;
-
-constexpr auto CODE_TRUE = 0u;
-constexpr auto CODE_FALSE = 1u;
-constexpr auto CODE_HI = 2u;
-constexpr auto CODE_LS = 3u;
-constexpr auto CODE_CC = 4u;
-constexpr auto CODE_CS = 5u;
-constexpr auto CODE_NE = 6u;
-constexpr auto CODE_EQ = 7u;
-constexpr auto CODE_VC = 8u;
-constexpr auto CODE_VS = 9u;
-constexpr auto CODE_PL = 10u;
-constexpr auto CODE_MI = 11u;
-constexpr auto CODE_GE = 12u;
-constexpr auto CODE_LT = 13u;
-constexpr auto CODE_GT = 14u;
-constexpr auto CODE_LE = 15u;
 
 constexpr auto MODE_DATA_DIRECT = 0u;
 constexpr auto MODE_ADDRESS_DIRECT = 1u;
@@ -47,7 +31,7 @@ constexpr auto INDEX_ADDRESS = 1u;
 constexpr auto INDEX_WORD = 0u;
 constexpr auto INDEX_LONG = 1u;
 
-constexpr auto MapOperandSize(const OperandSizes& size) {
+constexpr auto MapOperandSize(const OperandSizes& size) -> uint32_t {
     switch (size) {
         case OperandSizes::BYTE: return SIZE_BYTE;
         case OperandSizes::WORD: return SIZE_WORD;
@@ -56,24 +40,24 @@ constexpr auto MapOperandSize(const OperandSizes& size) {
     }
 }
 
-constexpr auto MapConditionCode(const ConditionCodes& code) {
+constexpr auto MapConditionCode(const ConditionCodes& code) -> uint32_t {
     switch (code) {
-        case ConditionCodes::TRUE: return CODE_TRUE;
-        case ConditionCodes::FALSE: return CODE_FALSE;
-        case ConditionCodes::HI: return CODE_HI;
-        case ConditionCodes::LS: return CODE_LS;
-        case ConditionCodes::CC: return CODE_CC;
-        case ConditionCodes::CS: return CODE_CS;
-        case ConditionCodes::NE: return CODE_NE;
-        case ConditionCodes::EQ: return CODE_EQ;
-        case ConditionCodes::VC: return CODE_VC;
-        case ConditionCodes::VS: return CODE_VS;
-        case ConditionCodes::PL: return CODE_PL;
-        case ConditionCodes::MI: return CODE_MI;
-        case ConditionCodes::GE: return CODE_GE;
-        case ConditionCodes::LT: return CODE_LT;
-        case ConditionCodes::GT: return CODE_GT;
-        case ConditionCodes::LE: return CODE_LE;
+        case ConditionCodes::TRUE: return CONDITION_CODE_T;
+        case ConditionCodes::FALSE: return CONDITION_CODE_F;
+        case ConditionCodes::HI: return CONDITION_CODE_HI;
+        case ConditionCodes::LS: return CONDITION_CODE_LS;
+        case ConditionCodes::CC: return CONDITION_CODE_CC;
+        case ConditionCodes::CS: return CONDITION_CODE_CS;
+        case ConditionCodes::NE: return CONDITION_CODE_NE;
+        case ConditionCodes::EQ: return CONDITION_CODE_EQ;
+        case ConditionCodes::VC: return CONDITION_CODE_VC;
+        case ConditionCodes::VS: return CONDITION_CODE_VS;
+        case ConditionCodes::PL: return CONDITION_CODE_PL;
+        case ConditionCodes::MI: return CONDITION_CODE_MI;
+        case ConditionCodes::GE: return CONDITION_CODE_GE;
+        case ConditionCodes::LT: return CONDITION_CODE_LT;
+        case ConditionCodes::GT: return CONDITION_CODE_GT;
+        case ConditionCodes::LE: return CONDITION_CODE_LE;
         default:return 0u;
     }
 }
