@@ -5,24 +5,14 @@
 #include "TestData.h"
 
 #include "M68000/Assembler.h"
+#include "M68000/M68000_Constants.h"
 
 using namespace rbrown::m68000;
 
 namespace {
 
-constexpr uint16_t TRAILER_WORD_ONE = 0xBBBBu;
-constexpr uint16_t TRAILER_WORD_TWO = 0xCCCCu;
-
-constexpr uint32_t RESET_STACK_POINTER = 0x01000000u;
-constexpr uint32_t RESET_PROGRAM_COUNTER = 0x1000u;
-
-constexpr auto FLAG_T = 0x8000u;
-constexpr auto FLAG_S = 0x2000u;
-constexpr auto FLAG_X = 0x0010u;
-constexpr auto FLAG_N = 0x0008u;
-constexpr auto FLAG_Z = 0x0004u;
-constexpr auto FLAG_V = 0x0002u;
-constexpr auto FLAG_C = 0x0001u;
+constexpr auto TRAILER_WORD_ONE = 0xBBBBu;
+constexpr auto TRAILER_WORD_TWO = 0xCCCCu;
 
 constexpr auto FromChars(const std::string& s) -> uint32_t {
     uint32_t r;
@@ -31,7 +21,7 @@ constexpr auto FromChars(const std::string& s) -> uint32_t {
 }
 
 auto MapToUint16(const StatusRegister& s) {
-    uint16_t sr = 0u;
+    uint16_t sr{};
     if (s.t) sr |= FLAG_T;
     if (s.s) sr |= FLAG_S;
     sr |= (s.interrupt_mask & 7u) << 8u;
@@ -58,13 +48,11 @@ auto Assemble(const std::vector<std::string>& assembly) -> std::vector<uint16_t>
 
 }
 
-TestFixture::TestFixture() : interrupts(),
-                             memory(),
-                             observer(),
-                             m68000(interrupts, memory, observer) {
-    m68000.WriteSP(RESET_STACK_POINTER);
-    m68000.WritePC(RESET_PROGRAM_COUNTER);
-}
+TestFixture::TestFixture() :
+    interrupts(),
+    memory(),
+    observer(),
+    m68000(interrupts, memory, observer) {}
 
 void TestFixture::Given(const struct Given& given) {
     m68000.WriteSR(MapToUint16(given.status_register));
