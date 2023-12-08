@@ -86,8 +86,8 @@ auto Disassembler::Line0Size0Rx4(uint32_t opcode) -> std::string {
             switch (ry) {
                 case 0u: return BinaryInstruction(mnemonic, immediate, Short());
                 case 1u: return BinaryInstruction(mnemonic, immediate, Long());
-                case 2u:return BinaryInstruction(mnemonic, immediate, PCDisplacement());
-                case 3u:return BinaryInstruction(mnemonic, immediate, PCIndex());
+                case 2u: return BinaryInstruction(mnemonic, immediate, PCDisplacement());
+                case 3u: return BinaryInstruction(mnemonic, immediate, PCIndex());
                 default:return {};
             }
         default:return {};

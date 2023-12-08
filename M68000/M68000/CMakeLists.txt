@@ -23,6 +23,20 @@ set(M68000_SRC
     src/Disassembler/Disassembler_LineD.cpp
     src/Disassembler/Disassembler_LineE.cpp
     src/M68000/M68000.cpp
+    src/M68000/M68000_Line0.cpp
+    src/M68000/M68000_Line123.cpp
+    src/M68000/M68000_Line4.cpp
+    src/M68000/M68000_Line5.cpp
+    src/M68000/M68000_Line6.cpp
+    src/M68000/M68000_Line7.cpp
+    src/M68000/M68000_Line8.cpp
+    src/M68000/M68000_Line9.cpp
+    src/M68000/M68000_LineB.cpp
+    src/M68000/M68000_LineC.cpp
+    src/M68000/M68000_LineD.cpp
+    src/M68000/M68000_LineE.cpp
+    src/M68000/M68000_EffectiveAddress.cpp
+    src/M68000/M68000_Operations.cpp
     )
 
 add_library(M68000 STATIC
