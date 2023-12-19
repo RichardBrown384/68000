@@ -188,7 +188,7 @@ auto Disassembler::Line4Size3(uint32_t opcode) -> std::string {
         case 2u: return Line4Size3Rx2(CONDITION_CODE_REGISTER, opcode); // MOVE.W <ea>, CCR
         case 3u: return Line4Size3Rx2(STATUS_REGISTER, opcode); // MOVE.W <ea>, SR
         case 4u: return Line4Size3Rx4(opcode); // MOVEM.L <list>, <ea>
-        case 5u: return Line4Size3Rx5(opcode);
+        case 5u: return Line4Size3Rx5(opcode); // TAS
         case 6u: return Line4Size3Rx6(opcode); // MOVEM.L <ea>, <list>
         case 7u: return Line4Size2Rx7("JMP", opcode);
         default: return {};
