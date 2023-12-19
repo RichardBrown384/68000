@@ -49,8 +49,8 @@ auto M68000::ExecuteCmpDataRegister(uint32_t opcode) -> void {
 template<typename T>
 auto M68000::ExecuteCmpAddressRegister(uint32_t opcode) -> void {
     switch (OpcodeModeY(opcode)) {
-        case 0u: return ExecuteCmpAddressRegister<&M68000::ReadFromDataRegister<T>, T > (opcode);
-        case 1u: return ExecuteCmpAddressRegister<&M68000::ReadFromAddressRegister<T>, T > (opcode);
+        case 0u: return ExecuteCmpAddressRegister<&M68000::ReadFromDataRegister<T>, T>(opcode);
+        case 1u: return ExecuteCmpAddressRegister<&M68000::ReadFromAddressRegister<T>, T>(opcode);
         case 2u: return ExecuteCmpAddressRegister<&M68000::ReadFromAddressIndirect<T>, T>(opcode);
         case 3u: return ExecuteCmpAddressRegister<&M68000::ReadFromAddressIncrement<T>, T>(opcode);
         case 4u: return ExecuteCmpAddressRegister<&M68000::ReadFromAddressDecrement<T>, T>(opcode);
@@ -62,7 +62,7 @@ auto M68000::ExecuteCmpAddressRegister(uint32_t opcode) -> void {
                 case 1u: return ExecuteCmpAddressRegister<&M68000::ReadFromLong<T>, T>(opcode);
                 case 2u: return ExecuteCmpAddressRegister<&M68000::ReadFromPCDisplacement<T>, T>(opcode);
                 case 3u: return ExecuteCmpAddressRegister<&M68000::ReadFromPCIndex<T>, T>(opcode);
-                case 4u: return ExecuteCmpAddressRegister<&M68000::ReadFromImmediate<T>, T > (opcode);
+                case 4u: return ExecuteCmpAddressRegister<&M68000::ReadFromImmediate<T>, T>(opcode);
                     [[unlikely]] default: return ExecuteIllegal();
             }
             [[unlikely]] default: return ExecuteIllegal();

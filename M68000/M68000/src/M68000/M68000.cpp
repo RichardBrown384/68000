@@ -1,8 +1,6 @@
 #include "M68000/M68000.h"
 #include "M68000/M68000_Constants.h"
-#include "M68000/M68000_Int.h"
 #include "M68000/M68000_Opcode.h"
-#include "M68000/M68000_EffectiveAddress.h"
 
 using namespace rbrown::m68000;
 
