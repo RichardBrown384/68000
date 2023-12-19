@@ -370,10 +370,10 @@ auto M68000::ExecuteJmp(uint32_t opcode) -> void {
         case 6u: return ExecuteJmp<&M68000::ControlAddressIndex>(opcode);
         case 7u:
             switch (OpcodeRegisterY(opcode)) {
-                case 0u: return ExecuteJmp < &M68000::ControlShort > (opcode);
-                case 1u: return ExecuteJmp < &M68000::ControlLong > (opcode);
-                case 2u: return ExecuteJmp < &M68000::ControlPCDisplacement > (opcode);
-                case 3u: return ExecuteJmp < &M68000::ControlPCIndex > (opcode);
+                case 0u: return ExecuteJmp<&M68000::ControlShort>(opcode);
+                case 1u: return ExecuteJmp<&M68000::ControlLong>(opcode);
+                case 2u: return ExecuteJmp<&M68000::ControlPCDisplacement>(opcode);
+                case 3u: return ExecuteJmp<&M68000::ControlPCIndex>(opcode);
                     [[unlikely]] default: return ExecuteIllegal();
             }
             [[unlikely]] default: return ExecuteIllegal();
